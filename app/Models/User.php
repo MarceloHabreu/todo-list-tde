@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -46,17 +47,15 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-    protected static function boot()
-    {
-        parent::boot();
+    // Relacionamentos
 
-        static::creating(function ($model) {
-            $model->id = (string) \Illuminate\Support\Str::uuid();
-        });
-    }
-    // Ao apagar um usuário apaga todas suas categorias
-    public function categories()
+    public function categories(): HasMany
     {
-        return $this->hasMany(Category::class)->onDelete('cascade');
+        return $this->hasMany(Category::class);
+    }
+
+    public function tasks(): HasMany
+    {
+        return $this->hasMany(Task::class);
     }
 }

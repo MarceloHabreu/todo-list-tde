@@ -11,35 +11,23 @@ class Task extends Model
         'title',
         'description',
         'due_date',
-        'status',
+        'status_id',
         'user_id',
-        'category_name',
+        'category_id',
     ];
 
-    protected static function boot()
-    {
-        parent::boot();
+    // Relacionamentos
 
-        static::creating(function ($model) {
-            $model->id = (string) \Illuminate\Support\Str::uuid();
-        });
-    }
-
-    // Relação com o modelo User (uma tarefa pertence a um usuário).
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
-
-    // Relação com o modelo Category (uma tarefa pertence a uma categoria).
-    public function category()
+    public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
     }
-
-    // busca a categoria pelo nome
-    public function getCategory()
+    public function status(): BelongsTo
     {
-        return Category::where('name', $this->category_name)->first();
+        return $this->belongsTo(Status::class);
     }
 }

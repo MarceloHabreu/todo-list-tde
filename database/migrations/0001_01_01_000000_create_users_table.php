@@ -12,17 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->uuid('id')->primary();
+            $table->id();
             $table->string('firstname');
             $table->string('lastname');
             $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->rememberToken();
             $table->timestamps();
         });
 
-        // para redefinição de senha
+        /* // para redefinição de senha
         Schema::create('password_reset_tokens', function (Blueprint $table) {
             $table->string('email')->primary();
             $table->string('token');
@@ -39,7 +37,7 @@ return new class extends Migration
             $table->integer('last_activity')->index();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade'); // apagou um usuário, apaga todas as suas sessoes
-        });
+        }); */
     }
 
     /**

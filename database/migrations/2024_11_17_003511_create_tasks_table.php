@@ -12,17 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('tasks', function (Blueprint $table) {
-            $table->uuid('id')->primary();
+            $table->id();
             $table->string('title');
             $table->text('description')->nullable();
             $table->timestamp('created_at')->useCurrent(); // data de criacao
-            $table->date('due_date')->nullable(); // data de vencimento
-            $table->string('status')->default('Pendente');
-            $table->uuid('user_id');
-            $table->uuid('category_id');
-
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
+            $table->date('due_date'); // data de vencimento
+            $table->foreignId('status_id')->constrained('status');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('category_id')->nullable()->constrained('categories')->onDelete('set null');
         });
     }
 
