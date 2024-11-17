@@ -19,7 +19,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        return view('actions.category.category_create');
+        return view('actions.category.create');
     }
 
     /**
@@ -49,21 +49,12 @@ class CategoryController extends Controller
         return redirect()->route('home')->with('message', 'Houve erro ao criar a categoria!');
     }
 
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Category $category)
     {
-        //
+        return view('actions.category.edit', ['category' => $category]);
     }
 
     /**
@@ -71,7 +62,13 @@ class CategoryController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+
+        $updated = $this->category->where('id', $id)->update($request->except(['_token', '_method']));
+
+        if ($updated) {
+            return redirect()->route('home')->with('message', 'Categoria atualizada com sucesso!');
+        }
+        return redirect()->route('home')->with('message', 'Houve erro ao atualizar a categoria!');
     }
 
     /**
@@ -79,6 +76,10 @@ class CategoryController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $removid = $this->category->where('id', $id)->delete();
+        if ($removid) {
+            return redirect()->route('home')->with('message', 'Categoria removida com sucesso!');
+        }
+        return redirect()->route('home')->with('message', 'Categoria não excluida!');
     }
 }
