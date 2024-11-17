@@ -5,9 +5,9 @@
     <a href="{{ route('login.index') }}">Entrar</a>
 
     <h2>Register</h2>
-    @if (session('success'))
+    @if (session('successfully'))
         <div style="color: green;">
-            {{ session('success') }}
+            {{ session('successfully') }}
         </div>
     @endif
     <form action="{{ route('register.store') }}" method="POST">

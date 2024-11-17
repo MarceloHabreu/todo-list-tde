@@ -29,12 +29,12 @@ class LoginController extends Controller
             return back()->withErrors(['error' => 'Email ou senha inválidos!'])->withInput();
         }
 
-        return redirect()->route('home')->with(['success' => 'Seja Bem-Vindo!']);
+        return redirect()->route('home')->with(['successfully' => 'Seja Bem-Vindo!']);
     }
 
     public function destroy()
     {
         Auth::logout();
-        return redirect()->route('welcome')->with(['success' => 'Você saiu com sucesso!']);
+        return redirect()->route('welcome')->with(['successfully' => 'Você saiu com sucesso!']);
     }
 }

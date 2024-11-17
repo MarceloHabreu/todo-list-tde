@@ -10,9 +10,9 @@
         <span>{{ $message }}</span>
     @enderror
 
-    @if (session('success'))
+    @if (session('successfully'))
         <div style="color: green;">
-            {{ session('success') }}
+            {{ session('successfully') }}
         </div>
     @endif
     <form action="{{ route('login.store') }}" method="POST">

@@ -15,11 +15,11 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->text('description')->nullable();
-            $table->timestamp('created_at')->useCurrent(); // data de criacao
+            $table->timestamps();
             $table->date('due_date'); // data de vencimento
-            $table->foreignId('status_id')->constrained('status');
+            $table->unsignedBigInteger('status_id')->default(2); // definido como padrão pendente
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->foreignId('category_id')->nullable()->constrained('categories')->onDelete('set null');
+            $table->foreignId('category_id')->nullable()->constrained('categories')->onDelete('cascade');
         });
     }
 

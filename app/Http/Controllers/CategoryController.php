@@ -31,6 +31,11 @@ class CategoryController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string|max:500',
+        ], [
+            'name.required' => 'O campo nome é obrigatório!',
+            'name.string' => 'O campo nome deve ser uma string válida!',
+            'description.required' => 'Comente algo sobre esta categoria no campo descrição!',
+            'description.string' => 'O campo descrição deve ser uma string válida!',
         ]);
 
         // Criação da categoria
@@ -43,10 +48,10 @@ class CategoryController extends Controller
         $created = $category->save();
 
         if ($created) {
-            return redirect()->route('home')->with('message', 'Categoria criada com sucesso!');
+            return redirect()->route('home')->with('successfully', 'Categoria criada com sucesso!');
         }
 
-        return redirect()->route('home')->with('message', 'Houve erro ao criar a categoria!');
+        return redirect()->route('home')->with('error', 'Houve erro ao criar a categoria!');
     }
 
     /**
@@ -66,9 +71,9 @@ class CategoryController extends Controller
         $updated = $this->category->where('id', $id)->update($request->except(['_token', '_method']));
 
         if ($updated) {
-            return redirect()->route('home')->with('message', 'Categoria atualizada com sucesso!');
+            return redirect()->route('home')->with('successfully', 'Categoria atualizada com sucesso!');
         }
-        return redirect()->route('home')->with('message', 'Houve erro ao atualizar a categoria!');
+        return redirect()->route('home')->with('error', 'Houve erro ao atualizar a categoria!');
     }
 
     /**
@@ -78,8 +83,8 @@ class CategoryController extends Controller
     {
         $removid = $this->category->where('id', $id)->delete();
         if ($removid) {
-            return redirect()->route('home')->with('message', 'Categoria removida com sucesso!');
+            return redirect()->route('home')->with('successfully', 'Categoria removida com sucesso!');
         }
-        return redirect()->route('home')->with('message', 'Categoria não excluida!');
+        return redirect()->route('home')->with('error', 'Categoria não excluida!');
     }
 }

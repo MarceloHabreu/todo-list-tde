@@ -4,9 +4,9 @@
         <form action="{{ route('categories.store') }}" method="post">
             @csrf
             <label for="name">Nome da Categoria:</label>
-            <input type="text" name="name" placeholder="nome">
-            <label for="name">Descrição da categoria:</label>
-            <input type="text" name="description" placeholder="description">
+            <input type="text" name="name" placeholder="nome...">
+            <label for="description">Descrição da categoria:</label>
+            <input type="text" name="description" placeholder="descrição...">
             <button type="submit">Criar</button>
         </form>
     </div>

@@ -15,6 +15,9 @@ class Task extends Model
         'user_id',
         'category_id',
     ];
+    protected $casts = [
+        'due_date' => 'date', // Converte automaticamente para instância de Carbon
+    ];
 
     // Relacionamentos
 
@@ -29,5 +32,17 @@ class Task extends Model
     public function status(): BelongsTo
     {
         return $this->belongsTo(Status::class);
+    }
+
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($task) {
+            if (is_null($task->status_id)) {
+                $task->status_id = 2; // ID do status 'Pendente'
+            }
+        });
     }
 }
