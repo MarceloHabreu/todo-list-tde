@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class RegisterController extends Controller
 {
+
     public function index()
     {
         return view('auth.register');
@@ -34,12 +36,18 @@ class RegisterController extends Controller
             'password.confirmed' => 'As senhas não coincidem!'
         ]);
 
-        User::create([
+        $user = User::create([
             'firstname' => $request->firstname,
             'lastname' => $request->lastname,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
-        return redirect()->route('home')->with(['success' => 'Seja Bem Vindo']);
+
+
+        Auth::login($user); // Realiza o login com o usuário recém-criado
+
+
+        // Redirecionamento com mensagem de sucesso 
+        return redirect()->route('home')->with('message', 'Usuário registrado e autenticado com sucesso!');
     }
 }

@@ -54,4 +54,9 @@ class User extends Authenticatable
             $model->id = (string) \Illuminate\Support\Str::uuid();
         });
     }
+    // Ao apagar um usuário apaga todas suas categorias
+    public function categories()
+    {
+        return $this->hasMany(Category::class)->onDelete('cascade');
+    }
 }

@@ -15,10 +15,10 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->string('name');
             $table->text('description')->nullable();
-            $table->uuid('user_id')->nullable();
+            $table->uuid('user_id');
             $table->timestamps();
 
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');   // referenciando id do usuário, caso apague um, apaga todas as suas categorias feitas também
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');   // referenciando id do usuário e caso apague um, apaga todas as suas categorias feitas também
         });
     }
 
