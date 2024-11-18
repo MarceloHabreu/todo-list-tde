@@ -28,6 +28,9 @@
                             <h6 class="card-subtitle mb-2 text-muted">
                                 Criada em: {{ $category->created_at->subHours(3)->format('d/m/Y \à\s H:i') }}
                             </h6>
+                            <h6 class="card-subtitle mb-2 text-muted">
+                                Atualizada em: {{ $category->updated_at->subHours(3)->format('d/m/Y \à\s H:i') }}
+                            </h6>
                             <p class="card-text">{{ $category->description }}</p>
                             <a href="{{ route('tasks.index.category', ['category' => $category->id]) }}"
                                 class="btn btn-secondary btn-sm">Visualizar

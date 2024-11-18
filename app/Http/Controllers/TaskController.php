@@ -25,10 +25,15 @@ class TaskController extends Controller
         // pegando o id do usuário logado
         $user = Auth::id();
 
+        // trazendo apenas tarefas daquela categoria!
         $tasks = Task::where('user_id', $user)->when($category, function ($query) use ($category) {
             return $query->where('category_id', $category);
         })->get();
-        return view('main.tasks', ['tasks' => $tasks]);
+
+        // Obtendo a categoria utilizada 
+        $usedCategory = Category::where('user_id', $user)->where('id', $category)->first();
+
+        return view('main.tasks', ['tasks' => $tasks, 'category' => $usedCategory]);
     }
 
     /**
@@ -38,7 +43,10 @@ class TaskController extends Controller
     {
         // recuperando todos os status
         $statusTasks = Status::orderBy('name', 'asc')->get();
-        $categories = Category::orderBy('name', 'asc')->get();
+
+        $user = Auth::id();
+        //recuperando categorias daquele usuário
+        $categories = Category::where('user_id', $user)->orderBy('name', 'asc')->get();
 
         return view('actions.task.create', [
             'statusTasks' => $statusTasks,
@@ -86,17 +94,31 @@ class TaskController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Task $task)
     {
-        //
+
+        return view('actions.task.show', [
+            'task' => $task
+        ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Task $task)
     {
-        //
+        // recuperando todos os status
+        $statusTasks = Status::orderBy('name', 'asc')->get();
+
+        $user = Auth::id();
+        //recuperando categorias daquele usuário
+        $categories = Category::where('user_id', $user)->orderBy('name', 'asc')->get();
+
+        return view('actions.task.edit', [
+            'task' => $task,
+            'statusTasks' => $statusTasks,
+            'categories' => $categories,
+        ]);
     }
 
     /**
@@ -104,7 +126,32 @@ class TaskController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string|max:700',
+            'due_date' => 'required',
+            'status_id' => 'nullable|exists:status,id',
+            'category_id' => 'required'
+        ], [
+            'title.required' => 'O campo titulo é obrigatório!',
+            'title.string' => 'O campo titulo deve ser uma string válida!',
+            'description.required' => 'Comente algo sobre sua tarefa no campo descrição!',
+            'description.string' => 'O campo descrição deve ser uma string válida!',
+            'due_date.required' => 'Coloque uma data limite!',
+            'category_id.required' => 'Escolha uma categoria para sua tarefa!',
+        ]);
+
+        // pegando a categoria atual antes de atualizar a atarefa
+        $task = $this->task->find($id);
+        $currentCategory = $task->category_id;
+
+        // atualizando tarefa
+        $updated = $this->task->where('id', $id)->update($request->except(['_token', '_method']));
+
+        if ($updated) {
+            return redirect()->route('tasks.index.category', ['category' => $currentCategory])->with('successfully', 'Tarefa atualizada com sucesso!');
+        }
+        return redirect()->route('tasks.index.category', ['category' => $currentCategory])->with('error', 'Houve erro ao atualizar a tarefa!');
     }
 
     /**
@@ -112,7 +159,15 @@ class TaskController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        // pegando a categoria atual antes de apagar a tarefa
+        $task = $this->task->find($id);
+        $currentCategory = $task->category_id;
+
+        $removed = $this->task->where('id', $id)->delete();
+        if ($removed) {
+            return redirect()->route('tasks.index.category', ['category' => $currentCategory])->with('successfully', 'Tarefa excluida com sucesso!');
+        }
+        return redirect()->route('tasks.index.category', ['category' => $currentCategory])->with('error', 'Houve error ao exluir a tarefa!');
     }
 
     public function changeSituation(Task $task)

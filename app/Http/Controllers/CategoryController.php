@@ -81,8 +81,8 @@ class CategoryController extends Controller
      */
     public function destroy(string $id)
     {
-        $removid = $this->category->where('id', $id)->delete();
-        if ($removid) {
+        $removed = $this->category->where('id', $id)->delete();
+        if ($removed) {
             return redirect()->route('home')->with('successfully', 'Categoria removida com sucesso!');
         }
         return redirect()->route('home')->with('error', 'Categoria não excluida!');

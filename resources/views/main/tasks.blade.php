@@ -18,7 +18,7 @@
         @endif
 
         <div class="container mt-4">
-            <h2>Lista de Tarefas:</h2>
+            <h2>Lista de Todas as Tarefas desta Categoria:</h2>
             @if ($tasks->isEmpty())
                 <div class="alert alert-warning" role="alert">
                     Nenhuma tarefa encontrada.
@@ -30,9 +30,10 @@
                             <div class="card shadow-sm">
                                 <div class="card-body">
                                     <h5 class="card-title">{{ $task->title }}</h5>
-                                    <p class="card-text">Descrição: {{ $task->description }}</p>
+                                    <p class="card-text">{{ $task->description }}</p>
                                     <p class="card-text">Data de criação:
-                                        {{ $task->created_at->subHours(3)->format('d/m/Y H:i') }}</p>
+                                        {{ $task->created_at->format('d/m/Y') }} às
+                                        {{ $task->created_at->subHours(3)->format('H:i') }}</p>
                                     <p class="card-text">Data de encerramento:
                                         {{ $task->due_date->format('d/m/Y') }}</p>
                                     <p class="card-text">Status:
